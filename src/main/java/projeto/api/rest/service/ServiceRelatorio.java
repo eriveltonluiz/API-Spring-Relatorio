@@ -26,7 +26,7 @@ public class ServiceRelatorio implements Serializable{
 	private JdbcTemplate jdbcTemplate;
 	
 	public byte[] gerarRelatorio(String nomeRelatorio, Map<String, Object> params, ServletContext servletContext) throws Exception {
-
+		
 		// Obter a conexão com o banco de dados
 		Connection con = jdbcTemplate.getDataSource().getConnection();
 
@@ -34,18 +34,21 @@ public class ServiceRelatorio implements Serializable{
 		/*String path = resourceLoader.getResource("classpath:" + nomeRelatorio + ".jrxml").getURI().getPath();
 		JasperReport jasperReport = JasperCompileManager.compileReport(path);
 		*/
+		JasperPrint print = null;
+		try {
 		InputStream fonte = this.getClass().getResourceAsStream("/relatorios/" + nomeRelatorio + ".jrxml");
-		System.out.println(fonte);
-		System.out.println(fonte.getClass().getCanonicalName());
 		//String caminhoJasper = ClassLoader.getSystemResource("relatorios").getPath() + "/" + nomeRelatorio + ".jasper";
 		JasperReport jasperReport = JasperCompileManager.compileReport(fonte);
 		
 		// Gerar o relatorio com os dados e conexão
-		JasperPrint print = JasperFillManager.fillReport(jasperReport, params, con);
-
+		print = JasperFillManager.fillReport(jasperReport, params, con);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		// Exporta para byte o Pdf para fazer o download
 		
 		byte[] retorno = JasperExportManager.exportReportToPdf(print);
+		
 		con.close();
 		return retorno;
 	}

@@ -36,11 +36,12 @@ public class ServiceRelatorio implements Serializable{
 		*/
 		JasperPrint print = null;
 		try {
-		InputStream caminhoJasper = servletContext.getResourceAsStream("relatorios/" + nomeRelatorio + ".jasper");
+			InputStream jasperStream = this.getClass().getResourceAsStream("/relatorios/" + nomeRelatorio + ".jrxml");
 		//InputStream fonte = this.getClass().getResourceAsStream("/relatorios/" + nomeRelatorio + ".jrxml");
+			//InputStream is = new FileInputStream("/relatorios/" + nomeRelatorio + ".jrxml");
 		//String caminhoJasper = ClassLoader.getSystemResource("relatorios").getPath() + "/" + nomeRelatorio + ".jrxml";
-		System.out.println(caminhoJasper);
-		JasperReport jasperReport = JasperCompileManager.compileReport(caminhoJasper);
+		//	JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+		JasperReport jasperReport = JasperCompileManager.compileReport(jasperStream);
 
 		// Gerar o relatorio com os dados e conexão
 		print = JasperFillManager.fillReport(jasperReport, params, con);

@@ -78,6 +78,7 @@ public class RecuperaController {
 					"Email já cadastrado no sistema. Para recuperar a senha é necessário ir na opção de Recuperar Acesso");
 		}
 
+		tipoSolicitacao = "";
 		return ResponseEntity.ok().body(objetoErro);
 	}
 }

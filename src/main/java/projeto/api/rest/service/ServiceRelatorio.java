@@ -18,40 +18,31 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
 @Service
-public class ServiceRelatorio implements Serializable{
+public class ServiceRelatorio implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	
-	public byte[] gerarRelatorio(String nomeRelatorio, Map<String, Object> params, ServletContext servletContext) throws Exception {
-		
+
+	public byte[] gerarRelatorio(String nomeRelatorio, Map<String, Object> params, ServletContext servletContext)
+			throws Exception {
+
 		// Obter a conexão com o banco de dados
 		Connection con = jdbcTemplate.getDataSource().getConnection();
 
-		// Carregar o caminho do arquivo Jasper
-		/*String path = resourceLoader.getResource("classpath:" + nomeRelatorio + ".jrxml").getURI().getPath();
-		JasperReport jasperReport = JasperCompileManager.compileReport(path);
-		*/
 		JasperPrint print = null;
-		try {
-			InputStream jasperStream = this.getClass().getResourceAsStream("/relatorios/" + nomeRelatorio + ".jrxml");
-		//InputStream fonte = this.getClass().getResourceAsStream("/relatorios/" + nomeRelatorio + ".jrxml");
-			//InputStream is = new FileInputStream("/relatorios/" + nomeRelatorio + ".jrxml");
-		//String caminhoJasper = ClassLoader.getSystemResource("relatorios").getPath() + "/" + nomeRelatorio + ".jrxml";
-		//	JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+
+		// Carregar o caminho do arquivo Jasper
+		InputStream jasperStream = this.getClass().getResourceAsStream("/relatorios/" + nomeRelatorio + ".jrxml");
 		JasperReport jasperReport = JasperCompileManager.compileReport(jasperStream);
 
 		// Gerar o relatorio com os dados e conexão
 		print = JasperFillManager.fillReport(jasperReport, params, con);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 		// Exporta para byte o Pdf para fazer o download
-		
 		byte[] retorno = JasperExportManager.exportReportToPdf(print);
-		
+
 		con.close();
 		return retorno;
 	}

@@ -1,5 +1,6 @@
 package projeto.api.rest.service;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class ServiceRelatorio implements Serializable{
 		*/
 		JasperPrint print = null;
 		try {
-		String caminhoJasper = servletContext.getRealPath("relatorios/" + nomeRelatorio + ".jasper");
+		InputStream caminhoJasper = servletContext.getResourceAsStream("relatorios/" + nomeRelatorio + ".jasper");
 		//InputStream fonte = this.getClass().getResourceAsStream("/relatorios/" + nomeRelatorio + ".jrxml");
 		//String caminhoJasper = ClassLoader.getSystemResource("relatorios").getPath() + "/" + nomeRelatorio + ".jrxml";
 		System.out.println(caminhoJasper);
